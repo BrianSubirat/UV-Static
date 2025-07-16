@@ -1,15 +1,10 @@
-{
-	"versions": [
-		"v1",
-		"v2",
-		"v3"
-	],
-	"language": "NodeJS",
-	"memoryUsage": 16.5,
-	"project": {
-		"name": "bare-server-node",
-		"description": "TOMPHTTP NodeJS Bare Server",
-		"repository": "https://github.com/tomphttp/bare-server-node",
-		"version": "2.0.3"
-	}
-}
+self.__uv$config = {
+    prefix: "/static/petezah/",
+    bare: "https://vplaza.org/bare",
+    encodeUrl: Ultraviolet.codec.xor.encode,
+    decodeUrl: Ultraviolet.codec.xor.decode,
+    handler: "/static/uv/uv.handler.js",
+    bundle: "/static/uv/uv.bundle.js",
+    config: "/static/uv/uv.config.js",
+    sw: "/static/uv/uv.sw.js",
+};
