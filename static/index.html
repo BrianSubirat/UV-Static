@@ -1,40 +1,301 @@
 <!DOCTYPE html>
-<html>
-   <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-      <link rel="stylesheet" href="index.css">
-      <script type="text/javascript" src="//counter.websiteout.net/js/7/10/5/0"></script>
-      <link rel="shortcut icon" type="image/jpg" href="~/favicon.ico"/>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-   </head>
-   <body>
-      <div id="header">
-        
-      </div>
-      <div id="content">
-         <h1>Void Proxy</h1>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Proxy</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-         <form id="uv-form">
-            <input id="uv-search-engine" value="https://duckduckgo.com/?q=" type="hidden"/> 
-            <input id="uv-address" type="text" placeholder="Search DuckDuckGo or type an URL" class="form__input"/>
-          </form>
-          <div class="desc left-margin">
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0c1421 0%, #1a2332 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .search-container {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-container:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            color: #6366f1;
+            font-size: 1.2rem;
+        }
+
+        #uv-address {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            flex: 1;
+            outline: none;
+            padding: 0.5rem 0;
+        }
+
+        #uv-address::placeholder {
+            color: #64748b;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .shortcut-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 1rem;
+            padding: 2rem 1.5rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .shortcut-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .shortcut-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .shortcut-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Specific icon colors */
+        .youtube { color: #ff0000; }
+        .discord { color: #5865f2; }
+        .tiktok { color: #000000; background: white; border-radius: 50%; padding: 0.3rem; }
+        .twitch { color: #9146ff; }
+        .reddit { color: #ff4500; }
+        .twitter { color: #1da1f2; }
+        .spotify { color: #1db954; }
+        .netflix { color: #e50914; }
+        .instagram { color: #e4405f; }
+        .facebook { color: #1877f2; }
+
+        .error-display {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0.5rem;
+            color: #fca5a5;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .shortcuts-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+            
+            .shortcut-card {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Void Proxy</h1>
+        <p class="subtitle">Fast, secure, and reliable web proxy service</p>
+        
+        <form id="uv-form">
+            <input id="uv-search-engine" value="https://duckduckgo.com/?q=" type="hidden"/>
+            <div class="search-container">
+                <i class="fas fa-globe search-icon"></i>
+                <input id="uv-address" type="text" placeholder="Search or enter a URL" autocomplete="off"/>
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+            </div>
+        </form>
+
+        <div class="error-display">
             <p id="uv-error"></p>
             <pre id="uv-error-code"></pre>
-          </div>
+        </div>
 
-      </div>
-      <script src="uv/uv.bundle.js" defer></script>
-      <script src="uv/uv.config.js" defer></script>
-      <script src="register-sw.js" defer></script>
-      <script src="search.js" defer></script>
-      <script src="index.js" defer></script>
-      <script src="error.js" defer></script>
-      
-         <p></p>
-      </div>
-   </body>
+        <div class="shortcuts-grid">
+            <div class="shortcut-card" onclick="navigateToSite('https://youtube.com')">
+                <i class="fab fa-youtube shortcut-icon youtube"></i>
+                <span class="shortcut-name">YouTube</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://discord.com')">
+                <i class="fab fa-discord shortcut-icon discord"></i>
+                <span class="shortcut-name">Discord</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://tiktok.com')">
+                <i class="fab fa-tiktok shortcut-icon tiktok"></i>
+                <span class="shortcut-name">TikTok</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://twitch.tv')">
+                <i class="fab fa-twitch shortcut-icon twitch"></i>
+                <span class="shortcut-name">Twitch</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://reddit.com')">
+                <i class="fab fa-reddit shortcut-icon reddit"></i>
+                <span class="shortcut-name">Reddit</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://twitter.com')">
+                <i class="fab fa-twitter shortcut-icon twitter"></i>
+                <span class="shortcut-name">Twitter</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://spotify.com')">
+                <i class="fab fa-spotify shortcut-icon spotify"></i>
+                <span class="shortcut-name">Spotify</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://netflix.com')">
+                <i class="fas fa-play-circle shortcut-icon netflix"></i>
+                <span class="shortcut-name">Netflix</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://instagram.com')">
+                <i class="fab fa-instagram shortcut-icon instagram"></i>
+                <span class="shortcut-name">Instagram</span>
+            </div>
+            
+            <div class="shortcut-card" onclick="navigateToSite('https://facebook.com')">
+                <i class="fab fa-facebook shortcut-icon facebook"></i>
+                <span class="shortcut-name">Facebook</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateToSite(url) {
+            document.getElementById('uv-address').value = url;
+            document.getElementById('uv-form').dispatchEvent(new Event('submit'));
+        }
+
+        // Enhanced search functionality
+        document.getElementById('uv-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const address = document.getElementById('uv-address').value;
+            const searchEngine = document.getElementById('uv-search-engine').value;
+            
+            if (!address) return;
+            
+            // Check if it's a URL or search term
+            let finalUrl;
+            if (address.includes('.') && !address.includes(' ')) {
+                finalUrl = address.startsWith('http') ? address : 'https://' + address;
+            } else {
+                finalUrl = searchEngine + encodeURIComponent(address);
+            }
+            
+            // Here you would integrate with your UV proxy logic
+            console.log('Navigating to:', finalUrl);
+        });
+
+        // Add enter key support
+        document.getElementById('uv-address').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('uv-form').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+
+    <!-- Your existing UV scripts -->
+    <script src="uv/uv.bundle.js" defer></script>
+    <script src="uv/uv.config.js" defer></script>
+    <script src="register-sw.js" defer></script>
+    <script src="search.js" defer></script>
+    <script src="index.js" defer></script>
+    <script src="error.js" defer></script>
+</body>
 </html>
