@@ -299,3 +299,47 @@
     <script src="error.js" defer></script>
 </body>
 </html>
+
+  <script>
+        function navigateToSite(url) {
+            document.getElementById('uv-address').value = url;
+            document.getElementById('uv-form').dispatchEvent(new Event('submit'));
+        }
+
+        // Enhanced search functionality
+        document.getElementById('uv-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const address = document.getElementById('uv-address').value;
+            const searchEngine = document.getElementById('uv-search-engine').value;
+            
+            if (!address) return;
+            
+            // Check if it's a URL or search term
+            let finalUrl;
+            if (address.includes('.') && !address.includes(' ')) {
+                finalUrl = address.startsWith('http') ? address : 'https://' + address;
+            } else {
+                finalUrl = searchEngine + encodeURIComponent(address);
+            }
+            
+            // Here you would integrate with your UV proxy logic
+            console.log('Navigating to:', finalUrl);
+        });
+
+        // Add enter key support
+        document.getElementById('uv-address').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('uv-form').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+
+    <!-- Your existing UV scripts -->
+    <script src="uv/uv.bundle.js" defer></script>
+    <script src="uv/uv.config.js" defer></script>
+    <script src="register-sw.js" defer></script>
+    <script src="search.js" defer></script>
+    <script src="index.js" defer></script>
+    <script src="error.js" defer></script>
+</body>
+</html>
