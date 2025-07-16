@@ -1,304 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Void Proxy</title>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Void Proxy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<style>
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0c1421 0%, #1a2332 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 3rem;
-            font-weight: 400;
-        }
-
-        .search-container {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(71, 85, 105, 0.3);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 3rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-container:hover {
-            border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-icon {
-            color: #6366f1;
-            font-size: 1.2rem;
-        }
-
-        #uv-address {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            flex: 1;
-            outline: none;
-            padding: 0.5rem 0;
-        }
-
-        #uv-address::placeholder {
-            color: #64748b;
-        }
-
-        .search-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            border: none;
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-        }
-
-        .shortcuts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .shortcut-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(71, 85, 105, 0.3);
-            border-radius: 1rem;
-            padding: 2rem 1.5rem;
-            text-decoration: none;
-            color: white;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-        }
-
-        .shortcut-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .shortcut-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .shortcut-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        /* Specific icon colors */
-        .youtube { color: #ff0000; }
-        .discord { color: #5865f2; }
-        .tiktok { color: #000000; background: white; border-radius: 50%; padding: 0.3rem; }
-        .twitch { color: #9146ff; }
-        .reddit { color: #ff4500; }
-        .twitter { color: #1da1f2; }
-        .spotify { color: #1db954; }
-        .netflix { color: #e50914; }
-        .instagram { color: #e4405f; }
-        .facebook { color: #1877f2; }
-
-        .error-display {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 0.5rem;
-            color: #fca5a5;
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .shortcuts-grid {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-                gap: 1rem;
-            }
-            
-            .shortcut-card {
-                padding: 1.5rem 1rem;
-            }
+            font-family: 'Roboto', sans-serif;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Void Proxy</h1>
-        <p class="subtitle">Fast, secure, and reliable web proxy service</p>
-        
-        <form id="uv-form">
-            <input id="uv-search-engine" value="https://duckduckgo.com/?q=" type="hidden"/>
-            <div class="search-container">
-                <i class="fas fa-globe search-icon"></i>
-                <input id="uv-address" type="text" placeholder="Search or enter a URL" autocomplete="off"/>
-                <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i>
-                    Search
-                </button>
-            </div>
-        </form>
+<body class="bg-gray-900 text-white">
+<div class="container mx-auto px-4 py-8">
+<div class="flex justify-between items-center mb-8">
+<p class="text-base text-white">Credits to petezah for helping me make the proxy</p>
+<button class="text-white hover:text-gray-300 flex items-center">
+<i class="material-icons mr-2">settings</i>
+<span>Settings</span>
+</button>
+</div>
+<header class="text-center mb-12">
+<h1 class="text-5xl font-bold mb-2">Void Proxy</h1>
+<p class="text-lg text-gray-400">Fast, secure, and reliable web proxy service</p>
+</header>
+<main>
+<div class="max-w-3xl mx-auto bg-gray-800/50 p-4 rounded-xl border border-gray-700">
+<form class="flex items-center">
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<i class="material-icons text-gray-400">language</i>
+</div>
+<input class="bg-gray-800 border-none text-white text-sm rounded-lg block w-full pl-10 p-4 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500" placeholder="Search or enter a URL" type="text"/>
+</div>
+<button class="ml-4 inline-flex items-center py-3 px-6 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-800" type="submit">
+<i class="material-icons mr-2">search</i>
+                        Search
+                    </button>
+</form>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-12 max-w-5xl mx-auto">
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<img alt="YouTube logo" class="h-12 w-12 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOnCtzjgPxnHXLW10Y_MXOtiLwNkB84Pae64xrp4wa7GRakA-MWWnrboyyksgrV1yZJt6GHj8ND0atbszVeq9lPKW_6kfimYttSZl4bcb05roPSlj71H4TQsrkTy-rAboTmajkBMfDivp9xfl3QpmdJv_wu1Csdmi-2o6SEKZLYNsDGek3f45gekn-k1Tp66rvjRMltygric55ENqz1yh9SDe3BLkeHtvCc0XLsrU5_ebImKHte7wE268w04IzJaeBhrp8wG9qPxm-"/>
+<span class="text-sm font-medium">YouTube</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<img alt="Spotify logo" class="h-12 w-12 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0UZ78P4qXK5Dw_zduzu9tDKXZW8eT05dQd481Nd4enrBYSafs4bsvmXcTMdNHj3K-61BfIDLkxWcwoZR935eg7i-HySQL8PcgRLA1w9EtoTsdzocZQD1Zdkld6Zl-5BetKb7hQvzc20VKoMVoqAioL4h8bfDGvkGp1i4GmAxJbHIGuGBJTc9y9P4j80iH9cPfCVFidyJeNAHDwhYsDdSNgDS4sS9F1ntpPdOt6ORdg_FnGcxffEL-m2JvPfkH08yBKIpo-m7H75W8"/>
+<span class="text-sm font-medium">Spotify</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<img alt="TikTok logo" class="h-12 w-12 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlt1k8UN1Xx2GrsZL0tVQaaAh6Rc-a7XIvXsVMHHIbLTIklgRNZBVotvpd1UTswniSonnPL-5iPsutuBKbUe53xazMFBGtX9_4bbSsijYr0xw_sNADVe7BgB-yf_t3Jlpl-GSiM2h-4Oa3luaU1pux_VLeDBPqQ1PsqoH8ZFIAkXo8F8a-D_oTUc9yPnrohxwK4CLj_YiN8JLOKV1ImFuxCeeIqmvySW4rt7UbCAHJrdjxZhARJFt4xGvx5DqyTFCMlOgvLbV7Rrzq"/>
+<span class="text-sm font-medium">TikTok</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<img alt="Netflix logo" class="h-12 w-12 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgB8KX9RNPOQyRl9b4YBm4LyDgz2fAJE_IDdUfhgkrq0GfjSrHgwzF774Bcm6rxEK9V2JgB695ZEjzVqVUlE7WGBCaSCroDbTbI61xfC60q9cvCh-r5lIJhCXP19j9IYXNgDWnMxsB9YTR9cCeojSzB5z-BxPTy4tG2qpI2-OxknmUv7hLOn9Tr6vs-IWXJnVeIkbfwGSWj8r2E7wdxtCuTMp5KH1gVo9AT28yzAnz-KErxnuHo9IjcLXFwNNk5JyizpfcO12rQj8V"/>
+<span class="text-sm font-medium">Netflix</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<img alt="Snapchat logo" class="h-12 w-12 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHBr3R18Wcvnr8VCDBEcL1dR99EcWecW9oxY8-BMT_edA_gbB8iW7HDAXgxVcmpRXU-cF1N8X824PZSJAu5nIChr6sui3MhKMSCXDammsn7ZZRlExwLVYH8ksuI4dmP6pW7-riN3c63B2nBdBsaCAZaYk9SZwdgRqfPFxSfl47XhUdHSCz7MkJSryJzbF3FdnhCVmig07tbcdJAgjJxwRbpuwPF3DiTthGyyAo65v_wysq4s1sH62Dc7t5AuPhDNj39_khemNEBZmB"/>
+<span class="text-sm font-medium">Snapchat</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<img alt="Reddit logo" class="h-12 w-12 mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX4jIV9uNQ4o64SLNEX229DoIkOAzPUmiVD0ULk5c8kWGGXAyYJXGRU219eL9fT58gh2gUX47wn31LrLaWjH89115lfEP2W1e4rx6lTBpODAwxfajN6XUkc0bkp0xpZUt1Y8_gCzWtIJQ1Ro6JOFU3FpqzymtMhEvdFyco3LeQxx1ULYGOfvTp2e5eKE_orZ3bmkWsDXbw8_mignibqQiPhZ_7isx-qram47hsZ22l0QsdjvfcnCLvVqeHah0fcOmla21-qUBYgJdk"/>
+<span class="text-sm font-medium">Reddit</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<i class="material-icons text-gray-400 text-5xl mb-2">discord</i>
+<span class="text-sm font-medium">Discord</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<svg class="h-12 w-12 mb-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.49 17.51l-2.09-2.09-2.09 2.09-2.09-2.09-2.09 2.09-2.09-2.09 2.09-2.09-2.09-2.09 2.09-2.09 2.09-2.09 2.09 2.09 2.09-2.09 2.09 2.09-2.09 2.09 2.09 2.09-2.09 2.09z"></path></svg>
+<span class="text-sm font-medium">Roblox</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<svg class="h-12 w-12 mb-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 6c-.77.35-1.6.58-2.46.67.88-.53 1.56-1.37 1.88-2.38-.83.49-1.74.85-2.7 1.03-.78-.84-1.9-1.36-3.12-1.36-2.36 0-4.28 1.92-4.28 4.28 0 .34.04.67.11.98-3.56-.18-6.72-1.88-8.83-4.48-.37.63-.58 1.37-.58 2.15 0 1.48.76 2.79 1.9 3.55-.7-.02-1.36-.21-1.94-.54v.05c0 2.07 1.47 3.8 3.42 4.19-.36.1-.74.15-1.13.15-.27 0-.54-.03-.8-.08.54 1.7 2.1 2.93 3.96 2.96-1.46 1.14-3.3 1.82-5.3 1.82-.35 0-.69-.02-1.03-.06 1.9 1.22 4.15 1.92 6.56 1.92 7.88 0 12.19-6.53 12.19-12.19 0-.19 0-.37-.01-.55.84-.6 1.56-1.36 2.14-2.22z"></path></svg>
+<span class="text-sm font-medium">Twitter</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gray-800/50 p-6 rounded-2xl hover:bg-gray-800/80 transition-colors" href="#">
+<svg class="h-12 w-12 mb-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.07 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44c0-.795-.645-1.44-1.441-1.44z"></path></svg>
+<span class="text-sm font-medium">Instagram</span>
+</a>
+</div>
+<section class="mt-20 max-w-4xl mx-auto text-center">
+<h2 class="text-3xl font-bold mb-4">What can Void Proxy do?</h2>
+<p class="text-gray-400 leading-relaxed">
+                    Void Proxy allows you to bypass internet restrictions and access websites and applications that might be blocked in your region or on your network. Our service is designed to be incredibly fast and reliable, ensuring a smooth and seamless browsing experience. Whether you want to stream your favorite shows, listen to music, or connect with friends on social media, Void Proxy provides you with the freedom to explore the web without limitations. Your privacy and security are our top priorities.
+                </p>
+</section>
+</main>
+</div>
 
-        <div class="error-display">
-            <p id="uv-error"></p>
-            <pre id="uv-error-code"></pre>
-        </div>
-
-        <div class="shortcuts-grid">
-            <div class="shortcut-card" onclick="navigateToSite('https://youtube.com')">
-                <i class="fab fa-youtube shortcut-icon youtube"></i>
-                <span class="shortcut-name">YouTube</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://discord.com')">
-                <i class="fab fa-discord shortcut-icon discord"></i>
-                <span class="shortcut-name">Discord</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://tiktok.com')">
-                <i class="fab fa-tiktok shortcut-icon tiktok"></i>
-                <span class="shortcut-name">TikTok</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://twitch.tv')">
-                <i class="fab fa-twitch shortcut-icon twitch"></i>
-                <span class="shortcut-name">Twitch</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://reddit.com')">
-                <i class="fab fa-reddit shortcut-icon reddit"></i>
-                <span class="shortcut-name">Reddit</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://twitter.com')">
-                <i class="fab fa-twitter shortcut-icon twitter"></i>
-                <span class="shortcut-name">Twitter</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://spotify.com')">
-                <i class="fab fa-spotify shortcut-icon spotify"></i>
-                <span class="shortcut-name">Spotify</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://netflix.com')">
-                <i class="fas fa-play-circle shortcut-icon netflix"></i>
-                <span class="shortcut-name">Netflix</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://instagram.com')">
-                <i class="fab fa-instagram shortcut-icon instagram"></i>
-                <span class="shortcut-name">Instagram</span>
-            </div>
-            
-            <div class="shortcut-card" onclick="navigateToSite('https://facebook.com')">
-                <i class="fab fa-facebook shortcut-icon facebook"></i>
-                <span class="shortcut-name">Facebook</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function navigateToSite(url) {
-            document.getElementById('uv-address').value = url;
-            document.getElementById('uv-form').dispatchEvent(new Event('submit'));
-        }
-
-        // Enhanced search functionality
-        document.getElementById('uv-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const address = document.getElementById('uv-address').value;
-            const searchEngine = document.getElementById('uv-search-engine').value;
-            
-            if (!address) return;
-            
-            // Check if it's a URL or search term
-            let finalUrl;
-            if (address.includes('.') && !address.includes(' ')) {
-                finalUrl = address.startsWith('http') ? address : 'https://' + address;
-            } else {
-                finalUrl = searchEngine + encodeURIComponent(address);
-            }
-            
-            // Here you would integrate with your UV proxy logic
-            console.log('Navigating to:', finalUrl);
-        });
-
-        // Add enter key support
-        document.getElementById('uv-address').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('uv-form').dispatchEvent(new Event('submit'));
-            }
-        });
-    </script>
-
-    <!-- Your existing UV scripts -->
-    <script src="uv/uv.bundle.js" defer></script>
-    <script src="uv/uv.config.js" defer></script>
-    <script src="register-sw.js" defer></script>
-    <script src="search.js" defer></script>
-    <script src="index.js" defer></script>
-    <script src="error.js" defer></script>
-</body>
-</html>
+</body></html>
 
   <script>
         function navigateToSite(url) {
